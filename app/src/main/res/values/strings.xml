@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">Spiandro - Camera & Mic</string>
+    <string name="app_name">Spiandro</string>
+    <string name="screen_time_title">Today\'s Screen Time</string>
+    <string name="daily_limit_title">Daily Limit: 2h 00m</string>
+    <string name="permission_required_title">Permission Required</string>
+    <string name="grant_permission_prompt">Usage Access is required to monitor screen time and enforce daily limits.</string>
+    <string name="grant_permission_btn">Grant Usage Access</string>
+    <string name="remaining_time_label">Remaining: %s</string>
+    <string name="top_apps_title">Most Used Apps</string>
+    <string name="no_usage_recorded">No app activity recorded today</string>
 </resources>
