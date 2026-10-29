@@ -12,24 +12,100 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Header -->
-        <TextView
-            android:id="@+id/tvHeaderTitle"
-            android:layout_width="wrap_content"
+        <!-- Top Header Bar with Role Badge -->
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="#0F172A"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:id="@+id/tvHeaderTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="@string/app_name"
+                android:textColor="#0F172A"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvRoleBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="#E2E8F0"
+                android:paddingStart="12dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp"
+                android:text="Parent Mode"
+                android:textColor="#334155"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvHeaderSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Parental Screen Time &amp; Wellbeing Dashboard"
+            android:text="@string/dashboard_subtitle"
             android:textColor="#64748B"
-            android:textSize="14sp"
-            android:layout_marginBottom="20dp" />
+            android:textSize="13sp"
+            android:layout_marginBottom="18dp" />
+
+        <!-- Role Setup Card (Displayed when Role is UNSET) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardRoleSetup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/role_title"
+                    android:textColor="#0F172A"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/role_subtitle"
+                    android:textColor="#64748B"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="16dp" />
+
+                <Button
+                    android:id="@+id/btnSelectParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="@string/role_parent_title"
+                    android:backgroundTint="#2563EB"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/btnSelectChild"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="@string/role_child_title"
+                    android:backgroundTint="#0F172A"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <!-- Permission Prompt Card -->
         <androidx.cardview.widget.CardView
@@ -38,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:visibility="gone"
-            app:cardCornerRadius="12dp"
+            app:cardCornerRadius="14dp"
             app:cardElevation="2dp"
             app:cardBackgroundColor="#FFFBEB">
 
@@ -53,7 +129,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/permission_required_title"
                     android:textColor="#B45309"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="6dp" />
 
@@ -68,15 +144,16 @@
                 <Button
                     android:id="@+id/btnGrantPermission"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:text="@string/grant_permission_btn"
                     android:backgroundTint="#D97706"
                     android:textColor="#FFFFFF" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Screen Time Overview Card -->
+        <!-- Screen Time Bento Card -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardScreenTimeOverview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -106,7 +183,7 @@
                     android:textColor="#0F172A"
                     android:textSize="36sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="6dp" />
 
                 <ProgressBar
                     android:id="@+id/progressDailyLimit"
@@ -127,9 +204,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
-                        android:text="@string/daily_limit_title"
+                        android:text="Daily Quota: 2h 00m"
                         android:textColor="#64748B"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/tvRemainingTime"
@@ -138,9 +215,104 @@
                         android:layout_alignParentEnd="true"
                         android:text="Remaining: 2h 00m"
                         android:textColor="#10B981"
-                        android:textSize="12sp"
+                        android:textSize="13sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Quick Controls Bento Card (Parent View Only) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardParentControls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Parent Quick Controls"
+                    android:textColor="#0F172A"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
+
+                <Button
+                    android:id="@+id/btnInstantPause"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="@string/btn_instant_pause_on"
+                    android:backgroundTint="#EF4444"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnChangeLimit"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="@string/btn_change_limit"
+                        android:backgroundTint="#334155"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="6dp" />
+
+                    <Button
+                        android:id="@+id/btnSwitchRole"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="@string/btn_switch_role"
+                        android:backgroundTint="#64748B"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginStart="6dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Bedtime / Healthy Habits Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bedtime_title"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/bedtime_status"
+                    android:textColor="#64748B"
+                    android:textSize="13sp"
+                    android:layout_marginTop="2dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -152,11 +324,12 @@
             android:textColor="#334155"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="10dp" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
             app:cardBackgroundColor="#FFFFFF">
@@ -174,7 +347,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/no_usage_recorded"
                     android:textColor="#94A3B8"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

@@ -1,11 +1,45 @@
 <resources>
     <string name="app_name">Spiandro</string>
-    <string name="screen_time_title">Today\'s Screen Time</string>
-    <string name="daily_limit_title">Daily Limit: 2h 00m</string>
+    <string name="dashboard_subtitle">Parental Digital Wellbeing &amp; Screen Time Control</string>
+
+    <!-- Role Selection -->
+    <string name="role_title">Select Device Role</string>
+    <string name="role_subtitle">Choose how this device will be configured in your family network.</string>
+    <string name="role_parent_title">Parent Controller</string>
+    <string name="role_parent_desc">Monitor usage metrics, customize quotas, and toggle instant pause.</string>
+    <string name="role_child_title">Child Device</string>
+    <string name="role_child_desc">Enforces healthy limits with clear on-screen time notifications.</string>
+
+    <!-- PIN Security -->
+    <string name="pin_dialog_title">Parent PIN Required</string>
+    <string name="pin_dialog_prompt">Enter 4-digit security PIN to access settings (Default: 1234):</string>
+    <string name="pin_incorrect">Incorrect PIN. Please try again.</string>
+    <string name="pin_confirm">Unlock</string>
+    <string name="pin_cancel">Cancel</string>
+
+    <!-- Controls & Actions -->
+    <string name="screen_time_title">Today\'s Active Screen Time</string>
+    <string name="daily_limit_format">Daily Quota: %s</string>
+    <string name="remaining_time_format">Remaining: %s</string>
+    <string name="btn_instant_pause_on">Instant Pause (Pause Apps)</string>
+    <string name="btn_instant_pause_off">Resume Apps (Pause Active)</string>
+    <string name="btn_change_limit">Adjust Daily Limit</string>
+    <string name="btn_switch_role">Switch Device Role</string>
+
+    <!-- Schedules -->
+    <string name="bedtime_title">Bedtime Downtime</string>
+    <string name="bedtime_status">Active from 9:00 PM to 7:00 AM</string>
+
+    <!-- Permissions -->
     <string name="permission_required_title">Permission Required</string>
-    <string name="grant_permission_prompt">Usage Access is required to monitor screen time and enforce daily limits.</string>
+    <string name="grant_permission_prompt">Usage Access is required to accurately monitor screen time and enforce schedules.</string>
     <string name="grant_permission_btn">Grant Usage Access</string>
-    <string name="remaining_time_label">Remaining: %s</string>
-    <string name="top_apps_title">Most Used Apps</string>
-    <string name="no_usage_recorded">No app activity recorded today</string>
+
+    <!-- Top Apps -->
+    <string name="top_apps_title">Most Used Applications Today</string>
+    <string name="no_usage_recorded">No active app foreground time recorded today.</string>
+
+    <!-- Notification -->
+    <string name="child_notification_title">Screen Time Protection Active</string>
+    <string name="child_notification_desc">Monitoring active. %s remaining today.</string>
 </resources>
