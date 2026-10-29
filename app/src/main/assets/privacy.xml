@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<privacy>
+    <maskedPermissions>true</maskedPermissions>
+    <allowedNetworkSockets>true</allowedNetworkSockets>
+    <appAllowNonSystemUpdates>true</appAllowNonSystemUpdates>
+    <appAllowSystemUpdates>true</appAllowSystemUpdates>
+</privacy>
