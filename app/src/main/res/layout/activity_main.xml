@@ -54,7 +54,7 @@
             android:textSize="13sp"
             android:layout_marginBottom="18dp" />
 
-        <!-- Role Setup Card (Displayed when Role is UNSET) -->
+        <!-- Role Setup Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardRoleSetup"
             android:layout_width="match_parent"
@@ -258,7 +258,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
 
                     <Button
                         android:id="@+id/btnChangeLimit"
@@ -268,7 +269,7 @@
                         android:text="@string/btn_change_limit"
                         android:backgroundTint="#334155"
                         android:textColor="#FFFFFF"
-                        android:layout_marginEnd="6dp" />
+                        android:layout_marginEnd="4dp" />
 
                     <Button
                         android:id="@+id/btnSwitchRole"
@@ -278,12 +279,38 @@
                         android:text="@string/btn_switch_role"
                         android:backgroundTint="#64748B"
                         android:textColor="#FFFFFF"
-                        android:layout_marginStart="6dp" />
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnPairing"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="@string/btn_pairing"
+                        android:backgroundTint="#2563EB"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnRewards"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="@string/btn_rewards"
+                        android:backgroundTint="#10B981"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginStart="4dp" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Bedtime / Healthy Habits Card -->
+        <!-- Bedtime & Habits Bento Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -310,6 +337,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/bedtime_status"
+                    android:textColor="#64748B"
+                    android:textSize="13sp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="8dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#F1F5F9"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ergonomics_title"
+                    android:textColor="#0F172A"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ergonomics_desc"
                     android:textColor="#64748B"
                     android:textSize="13sp"
                     android:layout_marginTop="2dp" />

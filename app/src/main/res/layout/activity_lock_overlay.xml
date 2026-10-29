@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F172A"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Status Icon Placeholder -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⏳"
+        android:textSize="64sp"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvLockTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daily Time's Up"
+        android:textColor="#FFFFFF"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/tvLockMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You've reached your daily screen time quota. Great job unplugging!"
+        android:textColor="#94A3B8"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_marginBottom="32dp" />
+
+    <!-- Action Buttons -->
+    <Button
+        android:id="@+id/btnAskMoreTime"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="Ask Parent for +15m"
+        android:backgroundTint="#2563EB"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnEmergencySos"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:text="Emergency Phone Call (SOS)"
+        android:backgroundTint="#EF4444"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnParentPinUnlock"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Parent PIN Unlock"
+        android:backgroundTint="#334155"
+        android:textColor="#FFFFFF" />
+
+</LinearLayout>

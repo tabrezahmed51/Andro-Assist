@@ -33,6 +33,9 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     private RoleManager roleManager;
+    private PairingManager pairingManager;
+    private RewardManager rewardManager;
+    private BedtimeManager bedtimeManager;
 
     private TextView tvRoleBadge;
     private CardView cardRoleSetup;
@@ -44,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnInstantPause;
     private Button btnChangeLimit;
     private Button btnSwitchRole;
+    private Button btnPairing;
+    private Button btnRewards;
 
     private TextView tvTotalScreenTime;
     private ProgressBar progressDailyLimit;
@@ -58,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         roleManager = new RoleManager(this);
+        pairingManager = new PairingManager(this);
+        rewardManager = new RewardManager(this);
+        bedtimeManager = new BedtimeManager();
 
         initViews();
         setupListeners();
@@ -75,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
         btnInstantPause = findViewById(R.id.btnInstantPause);
         btnChangeLimit = findViewById(R.id.btnChangeLimit);
         btnSwitchRole = findViewById(R.id.btnSwitchRole);
+        btnPairing = findViewById(R.id.btnPairing);
+        btnRewards = findViewById(R.id.btnRewards);
 
         tvTotalScreenTime = findViewById(R.id.tvTotalScreenTime);
         progressDailyLimit = findViewById(R.id.progressDailyLimit);
@@ -95,15 +105,17 @@ public class MainActivity extends AppCompatActivity {
             applyRoleState();
         });
 
-        btnGrantPermission.setOnClickListener(v ->
-                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-        );
+        btnGrantPermission.setOnClickListener(v -> showProminentDisclosure());
 
         btnInstantPause.setOnClickListener(v -> toggleInstantPause());
 
         btnChangeLimit.setOnClickListener(v -> showChangeLimitDialog());
 
         btnSwitchRole.setOnClickListener(v -> promptPinForRoleSwitch());
+
+        btnPairing.setOnClickListener(v -> showPairingDialog());
+
+        btnRewards.setOnClickListener(v -> showRewardsDialog());
     }
 
     @Override
@@ -111,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         applyRoleState();
         refreshScreenTime();
+        checkEnforcementRules();
     }
 
     private void applyRoleState() {
@@ -129,14 +142,14 @@ public class MainActivity extends AppCompatActivity {
 
         if (RoleManager.ROLE_PARENT.equals(role)) {
             tvRoleBadge.setText("Parent Mode");
-            tvRoleBadge.setBackgroundColor(0xFFDBEAFE); // Blue tint
+            tvRoleBadge.setBackgroundColor(0xFFDBEAFE);
             tvRoleBadge.setTextColor(0xFF1D4ED8);
             cardParentControls.setVisibility(View.VISIBLE);
             updatePauseButtonState();
             stopChildService();
         } else {
             tvRoleBadge.setText("Child Mode");
-            tvRoleBadge.setBackgroundColor(0xFFDCFCE7); // Green tint
+            tvRoleBadge.setBackgroundColor(0xFFDCFCE7);
             tvRoleBadge.setTextColor(0xFF15803D);
             cardParentControls.setVisibility(View.GONE);
             startChildService();
@@ -157,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
     private void updatePauseButtonState() {
         if (roleManager.isInstantPauseActive()) {
             btnInstantPause.setText(R.string.btn_instant_pause_off);
-            btnInstantPause.setBackgroundColor(0xFF16A34A); // Green to resume
+            btnInstantPause.setBackgroundColor(0xFF16A34A);
         } else {
             btnInstantPause.setText(R.string.btn_instant_pause_on);
-            btnInstantPause.setBackgroundColor(0xFFEF4444); // Red to pause
+            btnInstantPause.setBackgroundColor(0xFFEF4444);
         }
     }
 
@@ -196,6 +209,48 @@ public class MainActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void showPairingDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.btn_pairing);
+        String code = pairingManager.getActivePairingCode();
+        String family = pairingManager.getFamilyId();
+
+        builder.setMessage(String.format("Family ID: %s\nDevice ID: %s\n\nPairing Code:\n%s\n\nEnter this code on child devices to link.", family, pairingManager.getDeviceId(), code));
+        builder.setPositiveButton("Done", null);
+        builder.show();
+    }
+
+    private void showRewardsDialog() {
+        List<RewardManager.ChoreTask> chores = rewardManager.getDefaultTasks();
+        String[] titles = new String[chores.size()];
+        for (int i = 0; i < chores.size(); i++) {
+            RewardManager.ChoreTask task = chores.get(i);
+            titles[i] = String.format("%s (+%dm)", task.title, task.rewardMinutes);
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Chore & Bonus Time Board");
+        builder.setItems(titles, (dialog, which) -> {
+            RewardManager.ChoreTask selected = chores.get(which);
+            rewardManager.addBonusMinutes(selected.rewardMinutes);
+            Toast.makeText(this, String.format("Approved: +%dm bonus screen time awarded!", selected.rewardMinutes), Toast.LENGTH_SHORT).show();
+            refreshScreenTime();
+        });
+        builder.setNegativeButton("Close", null);
+        builder.show();
+    }
+
+    private void showProminentDisclosure() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.prominent_disclosure_title);
+        builder.setMessage(R.string.prominent_disclosure_body);
+        builder.setPositiveButton("Accept & Continue", (dialog, which) -> {
+            startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
+    }
+
     private void promptPinForRoleSwitch() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.pin_dialog_title);
@@ -216,6 +271,25 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.setNegativeButton(R.string.pin_cancel, null);
         builder.show();
+    }
+
+    private void checkEnforcementRules() {
+        if (!roleManager.isChild()) return;
+
+        // Check if Bedtime is currently active
+        if (bedtimeManager.isBedtimeActiveNow()) {
+            Intent lockIntent = new Intent(this, LockOverlayActivity.class);
+            lockIntent.putExtra(LockOverlayActivity.EXTRA_REASON, "BEDTIME");
+            startActivity(lockIntent);
+            return;
+        }
+
+        // Check if Instant Pause is active
+        if (roleManager.isInstantPauseActive()) {
+            Intent lockIntent = new Intent(this, LockOverlayActivity.class);
+            lockIntent.putExtra(LockOverlayActivity.EXTRA_REASON, "INSTANT_PAUSE");
+            startActivity(lockIntent);
+        }
     }
 
     private void refreshScreenTime() {
@@ -269,13 +343,16 @@ public class MainActivity extends AppCompatActivity {
                 endTime
         );
 
-        int limit = roleManager.getDailyLimitMinutes();
-        tvDailyLimitText.setText(getString(R.string.daily_limit_format, ScreenTimeHelper.formatDuration(limit)));
+        int baseLimit = roleManager.getDailyLimitMinutes();
+        int bonus = rewardManager.getBonusMinutes();
+        int totalLimit = baseLimit + bonus;
+
+        tvDailyLimitText.setText(getString(R.string.daily_limit_format, ScreenTimeHelper.formatDuration(totalLimit)));
 
         if (stats == null || stats.isEmpty()) {
             tvTotalScreenTime.setText("0h 00m");
             progressDailyLimit.setProgress(0);
-            tvRemainingTime.setText(getString(R.string.remaining_time_format, ScreenTimeHelper.formatDuration(limit)));
+            tvRemainingTime.setText(getString(R.string.remaining_time_format, ScreenTimeHelper.formatDuration(totalLimit)));
             tvEmptyAppsState.setVisibility(View.VISIBLE);
             return;
         }
@@ -294,14 +371,21 @@ public class MainActivity extends AppCompatActivity {
         int totalMinutes = (int) (totalMillis / (1000 * 60));
         tvTotalScreenTime.setText(ScreenTimeHelper.formatDuration(totalMinutes));
 
-        int progress = ScreenTimeHelper.calculateProgress(totalMinutes, limit);
+        int progress = ScreenTimeHelper.calculateProgress(totalMinutes, totalLimit);
         progressDailyLimit.setProgress(progress);
 
-        int remainingMinutes = ScreenTimeHelper.calculateRemaining(totalMinutes, limit);
+        int remainingMinutes = ScreenTimeHelper.calculateRemaining(totalMinutes, totalLimit);
         tvRemainingTime.setText(getString(
                 R.string.remaining_time_format,
                 ScreenTimeHelper.formatDuration(remainingMinutes)
         ));
+
+        // Trigger lock overlay if Child and time is completely up
+        if (roleManager.isChild() && remainingMinutes <= 0) {
+            Intent lockIntent = new Intent(this, LockOverlayActivity.class);
+            lockIntent.putExtra(LockOverlayActivity.EXTRA_REASON, "LIMIT_EXCEEDED");
+            startActivity(lockIntent);
+        }
 
         displayTopApps(usageMap);
     }

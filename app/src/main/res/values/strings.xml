@@ -25,15 +25,21 @@
     <string name="btn_instant_pause_off">Resume Apps (Pause Active)</string>
     <string name="btn_change_limit">Adjust Daily Limit</string>
     <string name="btn_switch_role">Switch Device Role</string>
+    <string name="btn_pairing">Family Device Pairing</string>
+    <string name="btn_rewards">Chores &amp; Bonus Board</string>
 
-    <!-- Schedules -->
+    <!-- Schedules & Ergonomics -->
     <string name="bedtime_title">Bedtime Downtime</string>
     <string name="bedtime_status">Active from 9:00 PM to 7:00 AM</string>
+    <string name="ergonomics_title">20-20-20 Eye Care</string>
+    <string name="ergonomics_desc">Micro-breaks scheduled every 20 minutes</string>
 
-    <!-- Permissions -->
+    <!-- Permissions & Disclosures -->
     <string name="permission_required_title">Permission Required</string>
     <string name="grant_permission_prompt">Usage Access is required to accurately monitor screen time and enforce schedules.</string>
     <string name="grant_permission_btn">Grant Usage Access</string>
+    <string name="prominent_disclosure_title">Privacy &amp; Data Disclosure</string>
+    <string name="prominent_disclosure_body">Andro-Assist accesses app foreground usage statistics exclusively to calculate screen time and enforce bedtime schedules set by parents. No audio, video, camera, keystrokes, or personal messaging content is ever recorded or transmitted.</string>
 
     <!-- Top Apps -->
     <string name="top_apps_title">Most Used Applications Today</string>
