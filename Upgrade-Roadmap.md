@@ -140,3 +140,9 @@ All 5 upgrade roadmap phases have been implemented and integrated into the codeb
 - **Agent Autonomy Engine** (`AiAgentTools.java`): Implements YOLO Mode (Fully Autonomous), Always Ask Mode (Human-in-the-loop action approval), and Fully Manual Mode.
 - **Cloud Providers Single Studio** (`AiCloudProviderManager.java`, `AiIntegrateActivity.java`): Provides unified configuration, sign-in, token management, and account reset for Pollinations AI and Puter.js AI.
 - **ChatGPT / Gemini Style Modern Chat UI** (`ChatActivity.java`, `ChatAdapter.java`, `activity_chat.xml`): Full-featured conversation interface with live voice recognition (STT), speech synthesis (TTS), file & media attachment sharing, and interactive tool confirmation cards.
+
+### Phase 7: Agentic Conversational Memory Engine (3,000-Token Thread & 100-Token User Guard)
+- **Token Budget & Heuristic Engine** (`AgentMemoryManager.java`): Computes accurate token counts using BPE word-split and punctuation weighting without third-party tokenizer binary bloat.
+- **100-Token User Prompt Guard**: Enforces strict 100-token limit per user message with live real-time input counters (`tvUserTokenCounter`), warning state indicators, and auto-truncation helpers.
+- **3,000-Token Sliding Memory Window**: Automatically buffers past conversation turns up to 3,000 tokens (`MAX_THREAD_TOKENS`), preserving chronological context while gracefully dropping older turns.
+- **Persistent Conversation Threads**: Serializes conversation history to local storage across app restarts, with one-tap memory clearing (`btnClearThread`).

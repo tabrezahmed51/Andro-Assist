@@ -65,6 +65,14 @@
                 android:src="@android:drawable/ic_lock_silent_mode_off"
                 android:contentDescription="Toggle Voice Output" />
 
+            <ImageButton
+                android:id="@+id/btnClearThread"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_delete"
+                android:contentDescription="Clear Memory Thread" />
+
             <Button
                 android:id="@+id/btnOpenIntegrateTab"
                 android:layout_width="wrap_content"
@@ -73,7 +81,7 @@
                 android:textSize="11sp"
                 android:backgroundTint="@color/accent_blue"
                 android:textColor="#FFFFFF"
-                android:layout_marginStart="6dp" />
+                android:layout_marginStart="4dp" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -119,6 +127,36 @@
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:contentDescription="Clear attachment" />
     </RelativeLayout>
+
+    <!-- Token Budget & Memory Status Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="@color/surface_card_stroke">
+
+        <TextView
+            android:id="@+id/tvThreadMemoryCounter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Memory: 0 / 3000 tokens"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/tvUserTokenCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 / 100 user tokens"
+            android:textColor="@color/accent_emerald"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- Bottom Modern Input Bar (ChatGPT / Gemini style) -->
     <LinearLayout

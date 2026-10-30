@@ -145,6 +145,10 @@ public class AiAgentRouter {
 
     // --- Query Dispatching & Tool Execution ---
     public void processQuery(String userQuery, RouterCallback callback) {
+        processQuery(userQuery, null, callback);
+    }
+
+    public void processQuery(String userQuery, java.util.List<ChatMessage> conversationHistory, RouterCallback callback) {
         RouterMode routerMode = getRouterMode();
         ThinkingMode thinkingMode = getThinkingMode();
         AutonomyMode autonomyMode = getAutonomyMode();
@@ -155,6 +159,16 @@ public class AiAgentRouter {
         // Build thinking instruction
         String thinkingPrompt = buildThinkingInstruction(thinkingMode);
         String systemPrompt = AiAgentTools.getSystemToolsPrompt() + "\n" + thinkingPrompt;
+
+        // Bounded thread context (up to 3,000 tokens)
+        String threadContext = "";
+        if (conversationHistory != null && !conversationHistory.isEmpty()) {
+            java.util.List<ChatMessage> bounded = AgentMemoryManager.buildBoundedThread(conversationHistory);
+            threadContext = AgentMemoryManager.formatConversationTranscript(bounded);
+            if (!threadContext.isEmpty()) {
+                systemPrompt += "\n\nConversation Memory (up to 3000 tokens):\n" + threadContext;
+            }
+        }
 
         // If AUTO mode & internal task with local model ready, or simple fast task:
         if (routerMode == RouterMode.AUTO && isInternalTask) {
