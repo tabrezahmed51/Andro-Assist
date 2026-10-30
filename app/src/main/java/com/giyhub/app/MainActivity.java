@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSwitchRole;
     private Button btnPairing;
     private Button btnRewards;
+    private Button btnLaunchAiChat;
+    private Button btnLaunchAiIntegrate;
 
     private TextView tvSentinelStatus;
     private TextView tvSentinelDns;
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         btnSwitchRole = findViewById(R.id.btnSwitchRole);
         btnPairing = findViewById(R.id.btnPairing);
         btnRewards = findViewById(R.id.btnRewards);
+        btnLaunchAiChat = findViewById(R.id.btnLaunchAiChat);
+        btnLaunchAiIntegrate = findViewById(R.id.btnLaunchAiIntegrate);
 
         tvSentinelStatus = findViewById(R.id.tvSentinelStatus);
         tvSentinelDns = findViewById(R.id.tvSentinelDns);
@@ -130,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
         btnPairing.setOnClickListener(v -> showPairingDialog());
 
         btnRewards.setOnClickListener(v -> showRewardsDialog());
+
+        btnLaunchAiChat.setOnClickListener(v ->
+                startActivity(new Intent(this, ChatActivity.class))
+        );
+
+        btnLaunchAiIntegrate.setOnClickListener(v ->
+                startActivity(new Intent(this, AiIntegrateActivity.class))
+        );
 
         btnToggleSentinel.setOnClickListener(v -> {
             if (roleManager.isChild()) {

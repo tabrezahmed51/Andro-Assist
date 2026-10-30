@@ -131,3 +131,12 @@ All 5 upgrade roadmap phases have been implemented and integrated into the codeb
 ### Phase 5: Google Play Compliance & Store Release
 - **Mandatory Prominent Disclosures**: In-app modal in `MainActivity.java` clearly disclosing `PACKAGE_USAGE_STATS` scope and strictly affirming zero recording of audio, video, camera, or keystrokes.
 - **Transparent FGS Notification**: Standardized persistent notification in `ChildMonitorService` complying with Google Play anti-stalkerware policies.
+
+### Phase 6: Edge Agentic AI, Hugging Face GGUF Downloader, Router & Modern Chat UI
+- **Device Hardware Profiler** (`DeviceHardwareProfiler.java`): Proactively scans device RAM, free storage, and SoC CPU cores to suggest the optimal AI model tier (Low-End < 4GB, Mid-Range 4-6GB, High-End 8GB+).
+- **Hugging Face GGUF Model Manager** (`ModelCatalog.java`): On-demand optional model downloader from Hugging Face Hub (Qwen 2.5 0.5B, SmolLM2 135M/1.7B, Llama 3.2 3B) with Download, Pause, Load into Chat, and Remove controls without repo weight.
+- **Smart AI Models Router** (`AiAgentRouter.java`): Supports Auto Fallback Routing (directing internal device tasks locally and general knowledge to cloud) vs Manual Model Selection.
+- **5-Tier Thinking Budget**: Offers 1. No Thinking, 2. Default (Auto), 3. Low, 4. Medium, and 5. High deep verification reasoning modes with collapsible `<think>` accordions.
+- **Agent Autonomy Engine** (`AiAgentTools.java`): Implements YOLO Mode (Fully Autonomous), Always Ask Mode (Human-in-the-loop action approval), and Fully Manual Mode.
+- **Cloud Providers Single Studio** (`AiCloudProviderManager.java`, `AiIntegrateActivity.java`): Provides unified configuration, sign-in, token management, and account reset for Pollinations AI and Puter.js AI.
+- **ChatGPT / Gemini Style Modern Chat UI** (`ChatActivity.java`, `ChatAdapter.java`, `activity_chat.xml`): Full-featured conversation interface with live voice recognition (STT), speech synthesis (TTS), file & media attachment sharing, and interactive tool confirmation cards.

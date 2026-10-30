@@ -353,7 +353,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
 
                     <Button
                         android:id="@+id/btnPairing"
@@ -375,6 +376,24 @@
                         android:textColor="#FFFFFF"
                         android:layout_marginStart="4dp" />
                 </LinearLayout>
+
+                <!-- AI Agent Chat & Integrate Studio Launchers -->
+                <Button
+                    android:id="@+id/btnLaunchAiChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="🤖 Open AI Agent Chat (Voice &amp; Media)"
+                    android:backgroundTint="@color/sentinel_purple"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginBottom="6dp" />
+
+                <Button
+                    android:id="@+id/btnLaunchAiIntegrate"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="⚡ AI Integrate Studio (Hugging Face GGUF / Cloud)"
+                    android:backgroundTint="@color/surface_card_stroke"
+                    android:textColor="@color/text_primary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

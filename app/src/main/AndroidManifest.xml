@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".App"
@@ -41,6 +42,17 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:launchMode="singleTop"
             android:excludeFromRecents="true" />
+
+        <!-- Modern ChatGPT / Gemini Style AI Agent Chat UI -->
+        <activity
+            android:name=".ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- AI Integrate Studio (Local GGUF Models & Cloud Providers) -->
+        <activity
+            android:name=".AiIntegrateActivity"
+            android:exported="false" />
 
         <!-- Mandatory Transparent Foreground Protection Service -->
         <service
