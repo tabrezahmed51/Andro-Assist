@@ -19,4 +19,22 @@ public class HardwareUsageReporterTest {
         long millis = (3 * 3600 + 25 * 60 + 40) * 1000L;
         assertEquals("03h 25m 40s", HardwareUsageReporter.formatHms(millis));
     }
+
+    @Test
+    public void testCategoryDistribution() {
+        java.util.List<HardwareUsageReporter.AppMetricItem> apps = new java.util.ArrayList<>();
+        apps.add(new HardwareUsageReporter.AppMetricItem(
+                "org.khancademy.kids", "Khan Academy Kids", 60 * 60 * 1000L, "01h 00m 00s", 50, 80, 50.0
+        ));
+        apps.add(new HardwareUsageReporter.AppMetricItem(
+                "com.google.android.youtube", "YouTube", 60 * 60 * 1000L, "01h 00m 00s", 70, 120, 50.0
+        ));
+
+        java.util.Map<String, Float> distribution = HardwareUsageReporter.getCategoryDistribution(apps);
+        org.junit.Assert.assertNotNull(distribution);
+        org.junit.Assert.assertTrue(distribution.containsKey("Education"));
+        org.junit.Assert.assertTrue(distribution.containsKey("Entertainment"));
+        org.junit.Assert.assertEquals(60f, distribution.get("Education"), 0.1f);
+        org.junit.Assert.assertEquals(60f, distribution.get("Entertainment"), 0.1f);
+    }
 }

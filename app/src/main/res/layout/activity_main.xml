@@ -270,6 +270,25 @@
                         android:textSize="12sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
+
+                <!-- Activity Curve Header -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="6dp"
+                    android:text="TEMPORAL ACTIVITY CURVE"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.08"
+                    android:textStyle="bold" />
+
+                <!-- MPAndroidChart Neon Cubic Curve -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartScreenTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_marginBottom="4dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -402,6 +421,14 @@
                         android:backgroundTint="@color/surface_card_stroke"
                         android:textColor="@color/text_primary" />
                 </LinearLayout>
+
+                <!-- MPAndroidChart Neon Donut Breakdown -->
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartCategoryDistribution"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="12dp" />
 
                 <!-- Dynamic 4D Metrics List -->
                 <LinearLayout

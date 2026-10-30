@@ -22,6 +22,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressDailyLimit;
     private TextView tvDailyLimitText;
     private TextView tvRemainingTime;
+    private LineChart lineChartScreenTime;
 
     // 4D Hardware Reports
     private TextView tvReportDateTitle;
@@ -76,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnMetricStorage;
     private Button btnMetricRam;
     private Button btnMetricBattery;
+    private PieChart pieChartCategoryDistribution;
     private LinearLayout layoutHardwareMetricsList;
     private TextView tvEmptyMetricsState;
 
@@ -141,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         progressDailyLimit = findViewById(R.id.progressDailyLimit);
         tvDailyLimitText = findViewById(R.id.tvDailyLimitText);
         tvRemainingTime = findViewById(R.id.tvRemainingTime);
+        lineChartScreenTime = findViewById(R.id.lineChartScreenTime);
 
         tvReportDateTitle = findViewById(R.id.tvReportDateTitle);
         btnDateToday = findViewById(R.id.btnDateToday);
@@ -150,8 +156,12 @@ public class MainActivity extends AppCompatActivity {
         btnMetricStorage = findViewById(R.id.btnMetricStorage);
         btnMetricRam = findViewById(R.id.btnMetricRam);
         btnMetricBattery = findViewById(R.id.btnMetricBattery);
+        pieChartCategoryDistribution = findViewById(R.id.pieChartCategoryDistribution);
         layoutHardwareMetricsList = findViewById(R.id.layoutHardwareMetricsList);
         tvEmptyMetricsState = findViewById(R.id.tvEmptyMetricsState);
+
+        CyberChartHelper.setupNeonLineChart(lineChartScreenTime);
+        CyberChartHelper.setupNeonDonutChart(pieChartCategoryDistribution, "Usage Split\nToday");
 
         tvFinancialLevelBadge = findViewById(R.id.tvFinancialLevelBadge);
         tvFinancialDesc = findViewById(R.id.tvFinancialDesc);
@@ -591,6 +601,14 @@ public class MainActivity extends AppCompatActivity {
             lockIntent.putExtra(LockOverlayActivity.EXTRA_REASON, "LIMIT_EXCEEDED");
             startActivity(lockIntent);
         }
+
+        // Update Cyberpunk Line & Donut Charts
+        HardwareUsageReporter.TimelineChartData chartData = usageReporter.getTimelineChartData(currentDateRange, report.totalForegroundMs);
+        CyberChartHelper.updateLineChartData(lineChartScreenTime, chartData.values, chartData.labels);
+
+        pieChartCategoryDistribution.setCenterText("Usage Split\n" + currentDateRange.label);
+        java.util.Map<String, Float> categoryMap = HardwareUsageReporter.getCategoryDistribution(report.topApps);
+        CyberChartHelper.updateDonutChartData(pieChartCategoryDistribution, categoryMap);
 
         renderMetricsList(report.topApps);
     }
