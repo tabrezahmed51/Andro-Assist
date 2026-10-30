@@ -36,8 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private PairingManager pairingManager;
     private RewardManager rewardManager;
     private BedtimeManager bedtimeManager;
+    private SentinelManager sentinelManager;
+    private AppHealthManager healthManager;
 
     private TextView tvRoleBadge;
+    private TextView tvHealthDiagnostics;
     private CardView cardRoleSetup;
     private CardView cardPermissionWarning;
     private CardView cardParentControls;
@@ -49,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSwitchRole;
     private Button btnPairing;
     private Button btnRewards;
+
+    private TextView tvSentinelStatus;
+    private TextView tvSentinelDns;
+    private Button btnToggleSentinel;
 
     private TextView tvTotalScreenTime;
     private ProgressBar progressDailyLimit;
@@ -66,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
         pairingManager = new PairingManager(this);
         rewardManager = new RewardManager(this);
         bedtimeManager = new BedtimeManager();
+        sentinelManager = new SentinelManager(this);
+        healthManager = AppHealthManager.getInstance(this);
 
         initViews();
         setupListeners();
@@ -73,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         tvRoleBadge = findViewById(R.id.tvRoleBadge);
+        tvHealthDiagnostics = findViewById(R.id.tvHealthDiagnostics);
         cardRoleSetup = findViewById(R.id.cardRoleSetup);
         cardPermissionWarning = findViewById(R.id.cardPermissionWarning);
         cardParentControls = findViewById(R.id.cardParentControls);
@@ -85,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
         btnSwitchRole = findViewById(R.id.btnSwitchRole);
         btnPairing = findViewById(R.id.btnPairing);
         btnRewards = findViewById(R.id.btnRewards);
+
+        tvSentinelStatus = findViewById(R.id.tvSentinelStatus);
+        tvSentinelDns = findViewById(R.id.tvSentinelDns);
+        btnToggleSentinel = findViewById(R.id.btnToggleSentinel);
 
         tvTotalScreenTime = findViewById(R.id.tvTotalScreenTime);
         progressDailyLimit = findViewById(R.id.progressDailyLimit);
@@ -116,6 +130,14 @@ public class MainActivity extends AppCompatActivity {
         btnPairing.setOnClickListener(v -> showPairingDialog());
 
         btnRewards.setOnClickListener(v -> showRewardsDialog());
+
+        btnToggleSentinel.setOnClickListener(v -> {
+            if (roleManager.isChild()) {
+                promptPinForSentinelToggle();
+            } else {
+                toggleSentinelFilter();
+            }
+        });
     }
 
     @Override
@@ -123,7 +145,50 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         applyRoleState();
         refreshScreenTime();
+        refreshSentinelUI();
+        tvHealthDiagnostics.setText(healthManager.getHealthDiagnostics());
         checkEnforcementRules();
+    }
+
+    private void refreshSentinelUI() {
+        boolean active = sentinelManager.isFilterEnabled();
+        if (active) {
+            tvSentinelStatus.setText(R.string.sentinel_desc_active);
+            btnToggleSentinel.setText(R.string.btn_toggle_sentinel_on);
+            tvSentinelDns.setText(getString(R.string.sentinel_dns_format, sentinelManager.getActiveDnsProfile() + " (Family Safe)"));
+        } else {
+            tvSentinelStatus.setText(R.string.sentinel_desc_inactive);
+            btnToggleSentinel.setText(R.string.btn_toggle_sentinel_off);
+            tvSentinelDns.setText(getString(R.string.sentinel_dns_format, sentinelManager.getActiveDnsProfile()));
+        }
+    }
+
+    private void toggleSentinelFilter() {
+        boolean newState = !sentinelManager.isFilterEnabled();
+        sentinelManager.setFilterEnabled(newState);
+        refreshSentinelUI();
+        Toast.makeText(this, newState ? "Sentinel 18+ Web Shield Enabled" : "Sentinel Filter Disabled (All Gates Open)", Toast.LENGTH_SHORT).show();
+    }
+
+    private void promptPinForSentinelToggle() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.pin_dialog_title);
+        builder.setMessage(R.string.pin_dialog_prompt);
+
+        final EditText pinInput = new EditText(this);
+        pinInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        builder.setView(pinInput);
+
+        builder.setPositiveButton(R.string.pin_confirm, (dialog, which) -> {
+            String enteredPin = pinInput.getText().toString().trim();
+            if (roleManager.verifyPin(enteredPin)) {
+                toggleSentinelFilter();
+            } else {
+                Toast.makeText(this, R.string.pin_incorrect, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton(R.string.pin_cancel, null);
+        builder.show();
     }
 
     private void applyRoleState() {
@@ -133,7 +198,6 @@ public class MainActivity extends AppCompatActivity {
             cardRoleSetup.setVisibility(View.VISIBLE);
             cardParentControls.setVisibility(View.GONE);
             tvRoleBadge.setText("Setup Required");
-            tvRoleBadge.setBackgroundColor(0xFFE2E8F0);
             stopChildService();
             return;
         }
@@ -142,15 +206,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (RoleManager.ROLE_PARENT.equals(role)) {
             tvRoleBadge.setText("Parent Mode");
-            tvRoleBadge.setBackgroundColor(0xFFDBEAFE);
-            tvRoleBadge.setTextColor(0xFF1D4ED8);
             cardParentControls.setVisibility(View.VISIBLE);
             updatePauseButtonState();
             stopChildService();
         } else {
             tvRoleBadge.setText("Child Mode");
-            tvRoleBadge.setBackgroundColor(0xFFDCFCE7);
-            tvRoleBadge.setTextColor(0xFF15803D);
             cardParentControls.setVisibility(View.GONE);
             startChildService();
         }
@@ -170,10 +230,8 @@ public class MainActivity extends AppCompatActivity {
     private void updatePauseButtonState() {
         if (roleManager.isInstantPauseActive()) {
             btnInstantPause.setText(R.string.btn_instant_pause_off);
-            btnInstantPause.setBackgroundColor(0xFF16A34A);
         } else {
             btnInstantPause.setText(R.string.btn_instant_pause_on);
-            btnInstantPause.setBackgroundColor(0xFFEF4444);
         }
     }
 
@@ -423,7 +481,7 @@ public class MainActivity extends AppCompatActivity {
             TextView row = new TextView(this);
             row.setText(String.format("%s — %s", appName, formattedTime));
             row.setTextSize(14f);
-            row.setTextColor(0xFF334155);
+            row.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
             row.setPadding(0, 8, 0, 8);
 
             layoutTopAppsList.addView(row);

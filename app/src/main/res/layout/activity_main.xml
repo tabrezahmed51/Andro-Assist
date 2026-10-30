@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8FAFC"
+    android:background="@color/bg_canvas"
     android:fillViewport="true">
 
     <LinearLayout
@@ -12,7 +12,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Top Header Bar with Role Badge -->
+        <!-- Top Header Bar with Role Badge & Self-Healing Pill -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:text="@string/app_name"
-                android:textColor="#0F172A"
+                android:textColor="@color/text_primary"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -34,13 +34,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:background="#E2E8F0"
+                android:background="@drawable/1000550675-49kb.png"
                 android:paddingStart="12dp"
                 android:paddingTop="4dp"
                 android:paddingEnd="12dp"
                 android:paddingBottom="4dp"
                 android:text="Parent Mode"
-                android:textColor="#334155"
+                android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -50,9 +50,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/dashboard_subtitle"
-            android:textColor="#64748B"
+            android:textColor="@color/text_secondary"
             android:textSize="13sp"
-            android:layout_marginBottom="18dp" />
+            android:layout_marginBottom="8dp" />
+
+        <!-- AI Self-Healing Diagnostics Pill -->
+        <TextView
+            android:id="@+id/tvHealthDiagnostics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/surface_card_stroke"
+            android:paddingStart="10dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="3dp"
+            android:text="Sentinel AI: 100% Operational"
+            android:textColor="@color/accent_emerald"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
 
         <!-- Role Setup Card -->
         <androidx.cardview.widget.CardView
@@ -63,7 +79,7 @@
             android:visibility="gone"
             app:cardCornerRadius="16dp"
             app:cardElevation="3dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/role_title"
-                    android:textColor="#0F172A"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="4dp" />
@@ -84,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/role_subtitle"
-                    android:textColor="#64748B"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp"
                     android:layout_marginBottom="16dp" />
 
@@ -93,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:text="@string/role_parent_title"
-                    android:backgroundTint="#2563EB"
+                    android:backgroundTint="@color/accent_blue"
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="8dp" />
 
@@ -102,12 +118,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="52dp"
                     android:text="@string/role_child_title"
-                    android:backgroundTint="#0F172A"
-                    android:textColor="#FFFFFF" />
+                    android:backgroundTint="@color/surface_card_stroke"
+                    android:textColor="@color/text_primary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Permission Prompt Card -->
+        <!-- Permission Warning Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardPermissionWarning"
             android:layout_width="match_parent"
@@ -116,7 +132,7 @@
             android:visibility="gone"
             app:cardCornerRadius="14dp"
             app:cardElevation="2dp"
-            app:cardBackgroundColor="#FFFBEB">
+            app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/permission_required_title"
-                    android:textColor="#B45309"
+                    android:textColor="@color/accent_warning"
                     android:textSize="15sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="6dp" />
@@ -137,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/grant_permission_prompt"
-                    android:textColor="#78350F"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp"
                     android:layout_marginBottom="12dp" />
 
@@ -146,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:text="@string/grant_permission_btn"
-                    android:backgroundTint="#D97706"
+                    android:backgroundTint="@color/accent_warning"
                     android:textColor="#FFFFFF" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -159,7 +175,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="3dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -171,7 +187,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/screen_time_title"
-                    android:textColor="#64748B"
+                    android:textColor="@color/text_secondary"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
@@ -180,7 +196,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0h 00m"
-                    android:textColor="#0F172A"
+                    android:textColor="@color/text_primary"
                     android:textSize="36sp"
                     android:textStyle="bold"
                     android:layout_marginTop="6dp" />
@@ -205,7 +221,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:text="Daily Quota: 2h 00m"
-                        android:textColor="#64748B"
+                        android:textColor="@color/text_secondary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -214,22 +230,21 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:text="Remaining: 2h 00m"
-                        android:textColor="#10B981"
+                        android:textColor="@color/accent_emerald"
                         android:textSize="13sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Quick Controls Bento Card (Parent View Only) -->
+        <!-- Sentinel Web Guardian Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardParentControls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="3dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -240,8 +255,61 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Parent Quick Controls"
-                    android:textColor="#0F172A"
+                    android:text="@string/sentinel_title"
+                    android:textColor="@color/sentinel_purple"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:id="@+id/tvSentinelStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sentinel_desc_active"
+                    android:textColor="@color/text_primary"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="6dp" />
+
+                <TextView
+                    android:id="@+id/tvSentinelDns"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Active DNS Guard: Cloudflare 1.1.1.3 (Family Safe)"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="12dp" />
+
+                <Button
+                    android:id="@+id/btnToggleSentinel"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="@string/btn_toggle_sentinel_on"
+                    android:backgroundTint="@color/sentinel_purple"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Parent Quick Controls Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardParentControls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
+            app:cardBackgroundColor="@color/surface_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Parent Remote Controls"
+                    android:textColor="@color/text_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="12dp" />
@@ -251,7 +319,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:text="@string/btn_instant_pause_on"
-                    android:backgroundTint="#EF4444"
+                    android:backgroundTint="@color/accent_crimson"
                     android:textColor="#FFFFFF"
                     android:layout_marginBottom="8dp" />
 
@@ -267,8 +335,8 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="@string/btn_change_limit"
-                        android:backgroundTint="#334155"
-                        android:textColor="#FFFFFF"
+                        android:backgroundTint="@color/surface_card_stroke"
+                        android:textColor="@color/text_primary"
                         android:layout_marginEnd="4dp" />
 
                     <Button
@@ -277,8 +345,8 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="@string/btn_switch_role"
-                        android:backgroundTint="#64748B"
-                        android:textColor="#FFFFFF"
+                        android:backgroundTint="@color/surface_card_stroke"
+                        android:textColor="@color/text_primary"
                         android:layout_marginStart="4dp" />
                 </LinearLayout>
 
@@ -293,7 +361,7 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="@string/btn_pairing"
-                        android:backgroundTint="#2563EB"
+                        android:backgroundTint="@color/accent_blue"
                         android:textColor="#FFFFFF"
                         android:layout_marginEnd="4dp" />
 
@@ -303,21 +371,21 @@
                         android:layout_height="48dp"
                         android:layout_weight="1"
                         android:text="@string/btn_rewards"
-                        android:backgroundTint="#10B981"
+                        android:backgroundTint="@color/accent_emerald"
                         android:textColor="#FFFFFF"
                         android:layout_marginStart="4dp" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Bedtime & Habits Bento Card -->
+        <!-- Bedtime & Habits Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -329,7 +397,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/bedtime_title"
-                    android:textColor="#0F172A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -337,7 +405,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/bedtime_status"
-                    android:textColor="#64748B"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="8dp" />
@@ -345,14 +413,14 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="#F1F5F9"
+                    android:background="@color/surface_card_stroke"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/ergonomics_title"
-                    android:textColor="#0F172A"
+                    android:textColor="@color/text_primary"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -360,7 +428,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/ergonomics_desc"
-                    android:textColor="#64748B"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp"
                     android:layout_marginTop="2dp" />
             </LinearLayout>
@@ -371,7 +439,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/top_apps_title"
-            android:textColor="#334155"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="10dp" />
@@ -382,7 +450,7 @@
             android:layout_marginBottom="24dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
-            app:cardBackgroundColor="#FFFFFF">
+            app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:id="@+id/layoutTopAppsList"
@@ -396,7 +464,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/no_usage_recorded"
-                    android:textColor="#94A3B8"
+                    android:textColor="@color/text_secondary"
                     android:textSize="13sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

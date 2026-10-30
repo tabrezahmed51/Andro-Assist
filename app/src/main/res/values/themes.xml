@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Day Theme: Clean Neomorphic & Soft Tactile Surfaces -->
+    <style name="Theme.AndroAssist" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/accent_blue</item>
+        <item name="colorPrimaryVariant">#1D4ED8</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">@color/accent_emerald</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="android:colorBackground">@color/bg_canvas</item>
+        <item name="android:statusBarColor">#D9E2EC</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

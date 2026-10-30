@@ -27,6 +27,14 @@
     <string name="btn_switch_role">Switch Device Role</string>
     <string name="btn_pairing">Family Device Pairing</string>
     <string name="btn_rewards">Chores &amp; Bonus Board</string>
+    <string name="btn_toggle_sentinel_on">Disable 18+ Web Shield</string>
+    <string name="btn_toggle_sentinel_off">Enable 18+ Web Shield</string>
+
+    <!-- Sentinel & Web Safety -->
+    <string name="sentinel_title">Sentinel Content Guardian</string>
+    <string name="sentinel_desc_active">Family Safe Filter Active: 18+ domains blocked &amp; SafeSearch enforced.</string>
+    <string name="sentinel_desc_inactive">Warning: Content filters are currently disabled. Full web access permitted.</string>
+    <string name="sentinel_dns_format">Active DNS Guard: %s</string>
 
     <!-- Schedules & Ergonomics -->
     <string name="bedtime_title">Bedtime Downtime</string>
