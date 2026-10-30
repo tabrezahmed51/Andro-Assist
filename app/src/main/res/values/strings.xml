@@ -56,4 +56,21 @@
     <!-- Notification -->
     <string name="child_notification_title">Screen Time Protection Active</string>
     <string name="child_notification_desc">Monitoring active. %s remaining today.</string>
+
+    <!-- Financial Protection & Anti-Bill Shock -->
+    <string name="financial_guard_title">Financial Shield &amp; Anti-Bill Shock</string>
+    <string name="financial_guard_subtitle">Stops accidental game purchases, unauthorized credit card bills, and rogue app installations.</string>
+    <string name="financial_guard_btn">Configure Financial Shield</string>
+
+    <!-- 4D Hardware Reports & Granular Stats -->
+    <string name="hardware_reports_title">4D Live Hardware &amp; Apps Analytics</string>
+    <string name="tab_screen_time">Time</string>
+    <string name="tab_storage">Storage</string>
+    <string name="tab_ram">RAM</string>
+    <string name="tab_battery">Battery</string>
+
+    <!-- App Recommendations & Safety Scanner -->
+    <string name="app_recommendations_title">Kids Safe Guide &amp; Risk Scanner</string>
+    <string name="btn_view_curated_apps">View Safe Apps for Kids</string>
+    <string name="btn_scan_app_risks">Scan Installed Apps for Risks</string>
 </resources>

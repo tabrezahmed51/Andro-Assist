@@ -11,4 +11,12 @@
     <color name="accent_crimson">#EF4444</color>
     <color name="accent_blue">#3B82F6</color>
     <color name="sentinel_purple">#818CF8</color>
+
+    <!-- Cyberpunk & Neon Live Accents (Obsidian & Liquid Glow) -->
+    <color name="neon_cyan">#00F0FF</color>
+    <color name="neon_emerald">#00FFA3</color>
+    <color name="neon_magenta">#FF007F</color>
+    <color name="cyber_violet">#A855F7</color>
+    <color name="cyber_dark_glass">#111827</color>
+    <color name="cyber_neon_glow">#00F0FF</color>
 </resources>

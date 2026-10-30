@@ -34,6 +34,12 @@ public class LockOverlayActivity extends AppCompatActivity {
         if ("BEDTIME".equalsIgnoreCase(reason)) {
             tvLockTitle.setText("Bedtime Mode Active");
             tvLockMessage.setText("Devices rest during sleep hours. See you tomorrow morning!");
+        } else if ("FINANCIAL_LOCK".equalsIgnoreCase(reason)) {
+            tvLockTitle.setText("Financial Shield Active");
+            tvLockMessage.setText("Payment gateways and financial transactions are locked to prevent accidental charges. Ask parent to approve.");
+        } else if ("INSTALL_BLOCKED".equalsIgnoreCase(reason)) {
+            tvLockTitle.setText("Installation Guard Active");
+            tvLockMessage.setText("App installations are restricted on this device. Ask parent to approve.");
         }
 
         btnAskMoreTime.setOnClickListener(v -> {

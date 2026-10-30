@@ -81,6 +81,68 @@ public class DeviceHardwareProfiler {
         return new HardwareProfile(totalRam, availRam, freeStorage, cores, tier);
     }
 
+    public static class CompatibilityReport {
+        public final boolean isCompatible;
+        public final boolean isStorageWarning;
+        public final boolean isRamWarning;
+        public final String statusTitle;
+        public final String message;
+        public final String recommendation;
+
+        public CompatibilityReport(boolean isCompatible, boolean isStorageWarning, boolean isRamWarning, String statusTitle, String message, String recommendation) {
+            this.isCompatible = isCompatible;
+            this.isStorageWarning = isStorageWarning;
+            this.isRamWarning = isRamWarning;
+            this.statusTitle = statusTitle;
+            this.message = message;
+            this.recommendation = recommendation;
+        }
+    }
+
+    public static CompatibilityReport evaluateModelCompatibility(HardwareProfile profile, ModelCatalog.ModelItem model) {
+        if (profile == null || model == null) {
+            return new CompatibilityReport(false, false, false, "Unknown Profile", "Unable to analyze device.", "Run scan first.");
+        }
+
+        double ramGb = profile.getTotalRamGb();
+        double freeStorageMb = profile.freeStorageBytes / (1024.0 * 1024.0);
+
+        boolean ramDeficient = ramGb < model.minRamGb;
+        boolean storageDeficient = freeStorageMb < (model.sizeMb * 1.3); // 30% safety margin
+
+        if (storageDeficient) {
+            return new CompatibilityReport(
+                    false,
+                    true,
+                    ramDeficient,
+                    "⚠️ Insufficient Storage",
+                    String.format(Locale.US, "Model requires %d MB. Device has only %.0f MB free disk space.", model.sizeMb, freeStorageMb),
+                    "Free up storage or use Cloud AI (Pollinations / Puter.js)."
+            );
+        }
+
+        if (ramDeficient) {
+            return new CompatibilityReport(
+                    false,
+                    false,
+                    true,
+                    "⚠️ RAM Pressure Warning",
+                    String.format(Locale.US, "%s requires %.1f GB RAM, but device has %.1f GB RAM. Loading it locally may cause lag or OOM.", model.name, model.minRamGb, ramGb),
+                    "Recommended alternative: " + profile.tier.recommendedModel + " or Cloud AI routing."
+            );
+        }
+
+        return new CompatibilityReport(
+                true,
+                false,
+                false,
+                "✅ Hardware Fully Compatible",
+                String.format(Locale.US, "Device verified: %.1f GB RAM, %.1f GB free storage, %d CPU cores. Fast local inference supported.",
+                        ramGb, profile.getFreeStorageGb(), profile.cpuCores),
+                "Ready for offline Agentic AI reasoning."
+        );
+    }
+
     public static DeviceTier evaluateTier(long totalRamBytes) {
         double ramGb = totalRamBytes / (1024.0 * 1024.0 * 1024.0);
         if (ramGb < 3.8) {

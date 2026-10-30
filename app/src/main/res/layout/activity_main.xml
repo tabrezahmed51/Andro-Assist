@@ -10,23 +10,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
-        <!-- Top Header Bar with Role Badge & Self-Healing Pill -->
+        <!-- Top Live Cyber Header Bar -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp">
 
-            <TextView
-                android:id="@+id/tvHeaderTitle"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:text="@string/app_name"
-                android:textColor="@color/text_primary"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:layout_alignParentStart="true">
+
+                <TextView
+                    android:id="@+id/tvHeaderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ANDRO-ASSIST"
+                    android:textColor="@color/neon_cyan"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:id="@+id/tvHeaderSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cyberpunk Digital Wellbeing &amp; Sentinel Shield"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="11sp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvRoleBadge"
@@ -34,51 +49,55 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/1000550675-49kb.png"
+                android:background="@drawable/bg_neon_pill"
                 android:paddingStart="12dp"
-                android:paddingTop="4dp"
+                android:paddingTop="5dp"
                 android:paddingEnd="12dp"
-                android:paddingBottom="4dp"
+                android:paddingBottom="5dp"
                 android:text="Parent Mode"
-                android:textColor="@color/text_primary"
-                android:textSize="12sp"
+                android:textColor="@color/neon_emerald"
+                android:textSize="11sp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/tvHeaderSubtitle"
-            android:layout_width="wrap_content"
+        <!-- Live Radar / Pulse Health Diagnostics Pill -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/dashboard_subtitle"
-            android:textColor="@color/text_secondary"
-            android:textSize="13sp"
-            android:layout_marginBottom="8dp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="14dp"
+            android:gravity="center_vertical">
 
-        <!-- AI Self-Healing Diagnostics Pill -->
-        <TextView
-            android:id="@+id/tvHealthDiagnostics"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/surface_card_stroke"
-            android:paddingStart="10dp"
-            android:paddingTop="3dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="3dp"
-            android:text="Sentinel AI: 100% Operational"
-            android:textColor="@color/accent_emerald"
-            android:textSize="11sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            <TextView
+                android:id="@+id/tvLivePulseRadar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● LIVE SHIELD ACTIVE"
+                android:textColor="@color/neon_emerald"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="12dp" />
 
-        <!-- Role Setup Card -->
+            <TextView
+                android:id="@+id/tvHealthDiagnostics"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sentinel AI: 100% Operational"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Role Setup Card (shown only if unset) -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardRoleSetup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:visibility="gone"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
@@ -107,7 +126,7 @@
                 <Button
                     android:id="@+id/btnSelectParent"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="50dp"
                     android:text="@string/role_parent_title"
                     android:backgroundTint="@color/accent_blue"
                     android:textColor="#FFFFFF"
@@ -116,7 +135,7 @@
                 <Button
                     android:id="@+id/btnSelectChild"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="50dp"
                     android:text="@string/role_child_title"
                     android:backgroundTint="@color/surface_card_stroke"
                     android:textColor="@color/text_primary" />
@@ -130,8 +149,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:visibility="gone"
-            app:cardCornerRadius="14dp"
-            app:cardElevation="2dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="3dp"
             app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
@@ -167,14 +186,14 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Screen Time Bento Card -->
+        <!-- Hero 3D Neon Live Dashboard Card -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardScreenTimeOverview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="6dp"
             app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
@@ -183,29 +202,46 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/screen_time_title"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="ACTIVE SCREEN MONITOR"
+                        android:textColor="@color/neon_cyan"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.08" />
+
+                    <TextView
+                        android:id="@+id/tvLiveClockSeconds"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Live Sync"
+                        android:textColor="@color/neon_emerald"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tvTotalScreenTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0h 00m"
+                    android:text="00h 00m 00s"
                     android:textColor="@color/text_primary"
-                    android:textSize="36sp"
+                    android:textSize="34sp"
                     android:textStyle="bold"
-                    android:layout_marginTop="6dp" />
+                    android:layout_marginTop="8dp" />
 
                 <ProgressBar
                     android:id="@+id/progressDailyLimit"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="12dp"
+                    android:layout_height="10dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
                     android:progress="0"
@@ -222,7 +258,7 @@
                         android:layout_alignParentStart="true"
                         android:text="Daily Quota: 2h 00m"
                         android:textColor="@color/text_secondary"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                     <TextView
                         android:id="@+id/tvRemainingTime"
@@ -230,36 +266,199 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:text="Remaining: 2h 00m"
-                        android:textColor="@color/accent_emerald"
-                        android:textSize="13sp"
+                        android:textColor="@color/neon_emerald"
+                        android:textSize="12sp"
                         android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Sentinel Web Guardian Card -->
+        <!-- 4D Granular Hardware & Application Analytics Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sentinel_title"
-                    android:textColor="@color/sentinel_purple"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hardware_reports_title"
+                        android:textColor="@color/text_primary"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvReportDateTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Today"
+                        android:textColor="@color/neon_cyan"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <!-- Date Range Selector (Today, Yesterday, 7 Days) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btnDateToday"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:text="Today"
+                        android:textSize="11sp"
+                        android:backgroundTint="@color/accent_blue"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnDateYesterday"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:text="Yesterday"
+                        android:textSize="11sp"
+                        android:backgroundTint="@color/surface_card_stroke"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnDateWeekly"
+                        android:layout_width="0dp"
+                        android:layout_height="38dp"
+                        android:layout_weight="1"
+                        android:text="7 Days"
+                        android:textSize="11sp"
+                        android:backgroundTint="@color/surface_card_stroke"
+                        android:textColor="@color/text_primary" />
+                </LinearLayout>
+
+                <!-- 4D Metric Selector Chips (Time, Storage, RAM, Battery) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btnMetricTime"
+                        android:layout_width="0dp"
+                        android:layout_height="36dp"
+                        android:layout_weight="1"
+                        android:text="⏱️ Time"
+                        android:textSize="10sp"
+                        android:backgroundTint="@color/neon_cyan"
+                        android:textColor="#000000"
+                        android:layout_marginEnd="3dp" />
+
+                    <Button
+                        android:id="@+id/btnMetricStorage"
+                        android:layout_width="0dp"
+                        android:layout_height="36dp"
+                        android:layout_weight="1"
+                        android:text="💾 Disk"
+                        android:textSize="10sp"
+                        android:backgroundTint="@color/surface_card_stroke"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginEnd="3dp" />
+
+                    <Button
+                        android:id="@+id/btnMetricRam"
+                        android:layout_width="0dp"
+                        android:layout_height="36dp"
+                        android:layout_weight="1"
+                        android:text="⚡ RAM"
+                        android:textSize="10sp"
+                        android:backgroundTint="@color/surface_card_stroke"
+                        android:textColor="@color/text_primary"
+                        android:layout_marginEnd="3dp" />
+
+                    <Button
+                        android:id="@+id/btnMetricBattery"
+                        android:layout_width="0dp"
+                        android:layout_height="36dp"
+                        android:layout_weight="1"
+                        android:text="🔋 Battery"
+                        android:textSize="10sp"
+                        android:backgroundTint="@color/surface_card_stroke"
+                        android:textColor="@color/text_primary" />
+                </LinearLayout>
+
+                <!-- Dynamic 4D Metrics List -->
+                <LinearLayout
+                    android:id="@+id/layoutHardwareMetricsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvEmptyMetricsState"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="No analytics recorded for selected timeframe."
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Sentinel Internet Filtering Gates (PG-13 vs 18+) -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/surface_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SENTINEL WEB SHIELD"
+                        android:textColor="@color/sentinel_purple"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvSentinelGateBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="PG-13 GUARD"
+                        android:textColor="@color/neon_emerald"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tvSentinelStatus"
@@ -267,7 +466,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/sentinel_desc_active"
                     android:textColor="@color/text_primary"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:layout_marginBottom="6dp" />
 
                 <TextView
@@ -276,7 +475,7 @@
                     android:layout_height="wrap_content"
                     android:text="Active DNS Guard: Cloudflare 1.1.1.3 (Family Safe)"
                     android:textColor="@color/text_secondary"
-                    android:textSize="12sp"
+                    android:textSize="11sp"
                     android:layout_marginBottom="12dp" />
 
                 <Button
@@ -289,35 +488,154 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Parent Quick Controls Card -->
+        <!-- Financial Protection & Anti-Bill Shock Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardParentControls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="3dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
             app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="16dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/financial_guard_title"
+                        android:textColor="@color/neon_magenta"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvFinancialLevelBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:text="Level 2: Lock Active"
+                        android:textColor="@color/neon_magenta"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tvFinancialDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/financial_guard_subtitle"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="12dp" />
+
+                <Button
+                    android:id="@+id/btnConfigureFinancial"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:text="@string/financial_guard_btn"
+                    android:backgroundTint="@color/neon_magenta"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Kids Safe App Recommendations & Risk Scanner Card -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/surface_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_recommendations_title"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="10dp">
+
+                    <Button
+                        android:id="@+id/btnViewCuratedApps"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="Kids Safe Guide"
+                        android:textSize="11sp"
+                        android:backgroundTint="@color/accent_emerald"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginEnd="4dp" />
+
+                    <Button
+                        android:id="@+id/btnScanAppRisks"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:text="Scan App Risks"
+                        android:textSize="11sp"
+                        android:backgroundTint="@color/accent_warning"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginStart="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layoutAppGuideContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Parent Quick Controls Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardParentControls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/surface_card">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Parent Remote Controls"
                     android:textColor="@color/text_primary"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
-                    android:layout_marginBottom="12dp" />
+                    android:layout_marginBottom="10dp" />
 
                 <Button
                     android:id="@+id/btnInstantPause"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="48dp"
                     android:text="@string/btn_instant_pause_on"
                     android:backgroundTint="@color/accent_crimson"
                     android:textColor="#FFFFFF"
@@ -332,9 +650,10 @@
                     <Button
                         android:id="@+id/btnChangeLimit"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="44dp"
                         android:layout_weight="1"
                         android:text="@string/btn_change_limit"
+                        android:textSize="11sp"
                         android:backgroundTint="@color/surface_card_stroke"
                         android:textColor="@color/text_primary"
                         android:layout_marginEnd="4dp" />
@@ -342,9 +661,10 @@
                     <Button
                         android:id="@+id/btnSwitchRole"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="44dp"
                         android:layout_weight="1"
                         android:text="@string/btn_switch_role"
+                        android:textSize="11sp"
                         android:backgroundTint="@color/surface_card_stroke"
                         android:textColor="@color/text_primary"
                         android:layout_marginStart="4dp" />
@@ -359,9 +679,10 @@
                     <Button
                         android:id="@+id/btnPairing"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="44dp"
                         android:layout_weight="1"
                         android:text="@string/btn_pairing"
+                        android:textSize="11sp"
                         android:backgroundTint="@color/accent_blue"
                         android:textColor="#FFFFFF"
                         android:layout_marginEnd="4dp" />
@@ -369,9 +690,10 @@
                     <Button
                         android:id="@+id/btnRewards"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
+                        android:layout_height="44dp"
                         android:layout_weight="1"
                         android:text="@string/btn_rewards"
+                        android:textSize="11sp"
                         android:backgroundTint="@color/accent_emerald"
                         android:textColor="#FFFFFF"
                         android:layout_marginStart="4dp" />
@@ -401,9 +723,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="3dp"
             app:cardBackgroundColor="@color/surface_card">
 
             <LinearLayout
@@ -417,7 +739,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/bedtime_title"
                     android:textColor="@color/text_primary"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -425,7 +747,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/bedtime_status"
                     android:textColor="@color/text_secondary"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="8dp" />
 
@@ -440,7 +762,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/ergonomics_title"
                     android:textColor="@color/text_primary"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -448,43 +770,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/ergonomics_desc"
                     android:textColor="@color/text_secondary"
-                    android:textSize="13sp"
+                    android:textSize="12sp"
                     android:layout_marginTop="2dp" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <!-- Top Apps Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/top_apps_title"
-            android:textColor="@color/text_primary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/surface_card">
-
-            <LinearLayout
-                android:id="@+id/layoutTopAppsList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/tvEmptyAppsState"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_usage_recorded"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="13sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

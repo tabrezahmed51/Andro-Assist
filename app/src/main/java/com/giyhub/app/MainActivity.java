@@ -2,10 +2,9 @@ package com.giyhub.app;
 
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
-import android.app.usage.UsageStats;
-import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,11 +23,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,8 +33,12 @@ public class MainActivity extends AppCompatActivity {
     private BedtimeManager bedtimeManager;
     private SentinelManager sentinelManager;
     private AppHealthManager healthManager;
+    private FinancialProtectionManager financialManager;
+    private HardwareUsageReporter usageReporter;
+    private AppRecommendationManager appRecManager;
 
     private TextView tvRoleBadge;
+    private TextView tvLivePulseRadar;
     private TextView tvHealthDiagnostics;
     private CardView cardRoleSetup;
     private CardView cardPermissionWarning;
@@ -55,16 +54,44 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLaunchAiChat;
     private Button btnLaunchAiIntegrate;
 
+    // Sentinel UI
+    private TextView tvSentinelGateBadge;
     private TextView tvSentinelStatus;
     private TextView tvSentinelDns;
     private Button btnToggleSentinel;
 
+    // Hero Live Screen Time
+    private TextView tvLiveClockSeconds;
     private TextView tvTotalScreenTime;
     private ProgressBar progressDailyLimit;
     private TextView tvDailyLimitText;
     private TextView tvRemainingTime;
-    private LinearLayout layoutTopAppsList;
-    private TextView tvEmptyAppsState;
+
+    // 4D Hardware Reports
+    private TextView tvReportDateTitle;
+    private Button btnDateToday;
+    private Button btnDateYesterday;
+    private Button btnDateWeekly;
+    private Button btnMetricTime;
+    private Button btnMetricStorage;
+    private Button btnMetricRam;
+    private Button btnMetricBattery;
+    private LinearLayout layoutHardwareMetricsList;
+    private TextView tvEmptyMetricsState;
+
+    private HardwareUsageReporter.DateRange currentDateRange = HardwareUsageReporter.DateRange.TODAY;
+    private enum MetricView { TIME, STORAGE, RAM, BATTERY }
+    private MetricView currentMetricView = MetricView.TIME;
+
+    // Financial Protection & Anti-Bill Shock
+    private TextView tvFinancialLevelBadge;
+    private TextView tvFinancialDesc;
+    private Button btnConfigureFinancial;
+
+    // Kids App Guide & Risk Scanner
+    private Button btnViewCuratedApps;
+    private Button btnScanAppRisks;
+    private LinearLayout layoutAppGuideContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
         bedtimeManager = new BedtimeManager();
         sentinelManager = new SentinelManager(this);
         healthManager = AppHealthManager.getInstance(this);
+        financialManager = new FinancialProtectionManager(this);
+        usageReporter = new HardwareUsageReporter(this);
+        appRecManager = new AppRecommendationManager();
 
         initViews();
         setupListeners();
@@ -84,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         tvRoleBadge = findViewById(R.id.tvRoleBadge);
+        tvLivePulseRadar = findViewById(R.id.tvLivePulseRadar);
         tvHealthDiagnostics = findViewById(R.id.tvHealthDiagnostics);
         cardRoleSetup = findViewById(R.id.cardRoleSetup);
         cardPermissionWarning = findViewById(R.id.cardPermissionWarning);
@@ -100,16 +131,35 @@ public class MainActivity extends AppCompatActivity {
         btnLaunchAiChat = findViewById(R.id.btnLaunchAiChat);
         btnLaunchAiIntegrate = findViewById(R.id.btnLaunchAiIntegrate);
 
+        tvSentinelGateBadge = findViewById(R.id.tvSentinelGateBadge);
         tvSentinelStatus = findViewById(R.id.tvSentinelStatus);
         tvSentinelDns = findViewById(R.id.tvSentinelDns);
         btnToggleSentinel = findViewById(R.id.btnToggleSentinel);
 
+        tvLiveClockSeconds = findViewById(R.id.tvLiveClockSeconds);
         tvTotalScreenTime = findViewById(R.id.tvTotalScreenTime);
         progressDailyLimit = findViewById(R.id.progressDailyLimit);
         tvDailyLimitText = findViewById(R.id.tvDailyLimitText);
         tvRemainingTime = findViewById(R.id.tvRemainingTime);
-        layoutTopAppsList = findViewById(R.id.layoutTopAppsList);
-        tvEmptyAppsState = findViewById(R.id.tvEmptyAppsState);
+
+        tvReportDateTitle = findViewById(R.id.tvReportDateTitle);
+        btnDateToday = findViewById(R.id.btnDateToday);
+        btnDateYesterday = findViewById(R.id.btnDateYesterday);
+        btnDateWeekly = findViewById(R.id.btnDateWeekly);
+        btnMetricTime = findViewById(R.id.btnMetricTime);
+        btnMetricStorage = findViewById(R.id.btnMetricStorage);
+        btnMetricRam = findViewById(R.id.btnMetricRam);
+        btnMetricBattery = findViewById(R.id.btnMetricBattery);
+        layoutHardwareMetricsList = findViewById(R.id.layoutHardwareMetricsList);
+        tvEmptyMetricsState = findViewById(R.id.tvEmptyMetricsState);
+
+        tvFinancialLevelBadge = findViewById(R.id.tvFinancialLevelBadge);
+        tvFinancialDesc = findViewById(R.id.tvFinancialDesc);
+        btnConfigureFinancial = findViewById(R.id.btnConfigureFinancial);
+
+        btnViewCuratedApps = findViewById(R.id.btnViewCuratedApps);
+        btnScanAppRisks = findViewById(R.id.btnScanAppRisks);
+        layoutAppGuideContainer = findViewById(R.id.layoutAppGuideContainer);
     }
 
     private void setupListeners() {
@@ -124,15 +174,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnGrantPermission.setOnClickListener(v -> showProminentDisclosure());
-
         btnInstantPause.setOnClickListener(v -> toggleInstantPause());
-
         btnChangeLimit.setOnClickListener(v -> showChangeLimitDialog());
-
         btnSwitchRole.setOnClickListener(v -> promptPinForRoleSwitch());
-
         btnPairing.setOnClickListener(v -> showPairingDialog());
-
         btnRewards.setOnClickListener(v -> showRewardsDialog());
 
         btnLaunchAiChat.setOnClickListener(v ->
@@ -150,14 +195,98 @@ public class MainActivity extends AppCompatActivity {
                 toggleSentinelFilter();
             }
         });
+
+        btnConfigureFinancial.setOnClickListener(v -> {
+            if (roleManager.isChild()) {
+                promptPinForFinancialConfig();
+            } else {
+                showFinancialLevelDialog();
+            }
+        });
+
+        // Date Selectors
+        btnDateToday.setOnClickListener(v -> {
+            currentDateRange = HardwareUsageReporter.DateRange.TODAY;
+            highlightDateButton(btnDateToday);
+            refreshHardwareReports();
+        });
+
+        btnDateYesterday.setOnClickListener(v -> {
+            currentDateRange = HardwareUsageReporter.DateRange.YESTERDAY;
+            highlightDateButton(btnDateYesterday);
+            refreshHardwareReports();
+        });
+
+        btnDateWeekly.setOnClickListener(v -> {
+            currentDateRange = HardwareUsageReporter.DateRange.WEEKLY;
+            highlightDateButton(btnDateWeekly);
+            refreshHardwareReports();
+        });
+
+        // 4D Metric Selectors
+        btnMetricTime.setOnClickListener(v -> {
+            currentMetricView = MetricView.TIME;
+            highlightMetricButton(btnMetricTime);
+            refreshHardwareReports();
+        });
+
+        btnMetricStorage.setOnClickListener(v -> {
+            currentMetricView = MetricView.STORAGE;
+            highlightMetricButton(btnMetricStorage);
+            refreshHardwareReports();
+        });
+
+        btnMetricRam.setOnClickListener(v -> {
+            currentMetricView = MetricView.RAM;
+            highlightMetricButton(btnMetricRam);
+            refreshHardwareReports();
+        });
+
+        btnMetricBattery.setOnClickListener(v -> {
+            currentMetricView = MetricView.BATTERY;
+            highlightMetricButton(btnMetricBattery);
+            refreshHardwareReports();
+        });
+
+        btnViewCuratedApps.setOnClickListener(v -> displayCuratedKidsApps());
+        btnScanAppRisks.setOnClickListener(v -> runInstalledAppsRiskScan());
+    }
+
+    private void highlightDateButton(Button active) {
+        int normalColor = ContextCompat.getColor(this, R.color.surface_card_stroke);
+        int activeColor = ContextCompat.getColor(this, R.color.accent_blue);
+
+        btnDateToday.setBackgroundTintList(android.content.res.ColorStateList.valueOf(btnDateToday == active ? activeColor : normalColor));
+        btnDateYesterday.setBackgroundTintList(android.content.res.ColorStateList.valueOf(btnDateYesterday == active ? activeColor : normalColor));
+        btnDateWeekly.setBackgroundTintList(android.content.res.ColorStateList.valueOf(btnDateWeekly == active ? activeColor : normalColor));
+
+        btnDateToday.setTextColor(btnDateToday == active ? 0xFFFFFFFF : ContextCompat.getColor(this, R.color.text_primary));
+        btnDateYesterday.setTextColor(btnDateYesterday == active ? 0xFFFFFFFF : ContextCompat.getColor(this, R.color.text_primary));
+        btnDateWeekly.setTextColor(btnDateWeekly == active ? 0xFFFFFFFF : ContextCompat.getColor(this, R.color.text_primary));
+    }
+
+    private void highlightMetricButton(Button active) {
+        int normalColor = ContextCompat.getColor(this, R.color.surface_card_stroke);
+        int cyanColor = ContextCompat.getColor(this, R.color.neon_cyan);
+
+        btnMetricTime.setBackgroundTintList(android.content.res.ColorStateList.valueOf(btnMetricTime == active ? cyanColor : normalColor));
+        btnMetricStorage.setBackgroundTintList(android.content.res.ColorStateList.valueOf(btnMetricStorage == active ? cyanColor : normalColor));
+        btnMetricRam.setBackgroundTintList(android.content.res.ColorStateList.valueOf(btnMetricRam == active ? cyanColor : normalColor));
+        btnMetricBattery.setBackgroundTintList(android.content.res.ColorStateList.valueOf(btnMetricBattery == active ? cyanColor : normalColor));
+
+        btnMetricTime.setTextColor(btnMetricTime == active ? 0xFF000000 : ContextCompat.getColor(this, R.color.text_primary));
+        btnMetricStorage.setTextColor(btnMetricStorage == active ? 0xFF000000 : ContextCompat.getColor(this, R.color.text_primary));
+        btnMetricRam.setTextColor(btnMetricRam == active ? 0xFF000000 : ContextCompat.getColor(this, R.color.text_primary));
+        btnMetricBattery.setTextColor(btnMetricBattery == active ? 0xFF000000 : ContextCompat.getColor(this, R.color.text_primary));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         applyRoleState();
-        refreshScreenTime();
         refreshSentinelUI();
+        refreshFinancialUI();
+        refreshHardwareReports();
         tvHealthDiagnostics.setText(healthManager.getHealthDiagnostics());
         checkEnforcementRules();
     }
@@ -165,10 +294,14 @@ public class MainActivity extends AppCompatActivity {
     private void refreshSentinelUI() {
         boolean active = sentinelManager.isFilterEnabled();
         if (active) {
+            tvSentinelGateBadge.setText("PG-13 GUARD");
+            tvSentinelGateBadge.setTextColor(ContextCompat.getColor(this, R.color.neon_emerald));
             tvSentinelStatus.setText(R.string.sentinel_desc_active);
             btnToggleSentinel.setText(R.string.btn_toggle_sentinel_on);
             tvSentinelDns.setText(getString(R.string.sentinel_dns_format, sentinelManager.getActiveDnsProfile() + " (Family Safe)"));
         } else {
+            tvSentinelGateBadge.setText("18+ OPEN");
+            tvSentinelGateBadge.setTextColor(ContextCompat.getColor(this, R.color.neon_magenta));
             tvSentinelStatus.setText(R.string.sentinel_desc_inactive);
             btnToggleSentinel.setText(R.string.btn_toggle_sentinel_off);
             tvSentinelDns.setText(getString(R.string.sentinel_dns_format, sentinelManager.getActiveDnsProfile()));
@@ -179,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
         boolean newState = !sentinelManager.isFilterEnabled();
         sentinelManager.setFilterEnabled(newState);
         refreshSentinelUI();
-        Toast.makeText(this, newState ? "Sentinel 18+ Web Shield Enabled" : "Sentinel Filter Disabled (All Gates Open)", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, newState ? "Sentinel PG-13 Safe Filter Activated" : "18+ Gates Open (Content Unlocked)", Toast.LENGTH_SHORT).show();
     }
 
     private void promptPinForSentinelToggle() {
@@ -200,6 +333,51 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         builder.setNegativeButton(R.string.pin_cancel, null);
+        builder.show();
+    }
+
+    private void refreshFinancialUI() {
+        FinancialProtectionManager.ProtectionLevel level = financialManager.getProtectionLevel();
+        tvFinancialLevelBadge.setText(level.title);
+        tvFinancialDesc.setText(level.description + " Blocked attempts: " + financialManager.getBlockedAttemptsCount());
+    }
+
+    private void promptPinForFinancialConfig() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.pin_dialog_title);
+        builder.setMessage(R.string.pin_dialog_prompt);
+
+        final EditText pinInput = new EditText(this);
+        pinInput.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+        builder.setView(pinInput);
+
+        builder.setPositiveButton(R.string.pin_confirm, (dialog, which) -> {
+            String enteredPin = pinInput.getText().toString().trim();
+            if (roleManager.verifyPin(enteredPin)) {
+                showFinancialLevelDialog();
+            } else {
+                Toast.makeText(this, R.string.pin_incorrect, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton(R.string.pin_cancel, null);
+        builder.show();
+    }
+
+    private void showFinancialLevelDialog() {
+        FinancialProtectionManager.ProtectionLevel[] levels = FinancialProtectionManager.ProtectionLevel.values();
+        String[] titles = new String[levels.length];
+        for (int i = 0; i < levels.length; i++) {
+            titles[i] = levels[i].title + "\n" + levels[i].description;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Financial Protection & Anti-Bill Shock");
+        builder.setItems(titles, (dialog, which) -> {
+            financialManager.setProtectionLevel(levels[which]);
+            refreshFinancialUI();
+            Toast.makeText(this, "Protection Level Updated: " + levels[which].title, Toast.LENGTH_SHORT).show();
+        });
+        builder.setNegativeButton("Cancel", null);
         builder.show();
     }
 
@@ -270,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     int mins = Integer.parseInt(val);
                     roleManager.setDailyLimitMinutes(mins);
-                    refreshScreenTime();
+                    refreshHardwareReports();
                     Toast.makeText(this, "Daily limit updated", Toast.LENGTH_SHORT).show();
                 } catch (NumberFormatException ignored) {}
             }
@@ -304,7 +482,7 @@ public class MainActivity extends AppCompatActivity {
             RewardManager.ChoreTask selected = chores.get(which);
             rewardManager.addBonusMinutes(selected.rewardMinutes);
             Toast.makeText(this, String.format("Approved: +%dm bonus screen time awarded!", selected.rewardMinutes), Toast.LENGTH_SHORT).show();
-            refreshScreenTime();
+            refreshHardwareReports();
         });
         builder.setNegativeButton("Close", null);
         builder.show();
@@ -346,7 +524,6 @@ public class MainActivity extends AppCompatActivity {
     private void checkEnforcementRules() {
         if (!roleManager.isChild()) return;
 
-        // Check if Bedtime is currently active
         if (bedtimeManager.isBedtimeActiveNow()) {
             Intent lockIntent = new Intent(this, LockOverlayActivity.class);
             lockIntent.putExtra(LockOverlayActivity.EXTRA_REASON, "BEDTIME");
@@ -354,24 +531,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // Check if Instant Pause is active
         if (roleManager.isInstantPauseActive()) {
             Intent lockIntent = new Intent(this, LockOverlayActivity.class);
             lockIntent.putExtra(LockOverlayActivity.EXTRA_REASON, "INSTANT_PAUSE");
             startActivity(lockIntent);
         }
-    }
-
-    private void refreshScreenTime() {
-        if (!hasUsageStatsPermission()) {
-            cardPermissionWarning.setVisibility(View.VISIBLE);
-            tvTotalScreenTime.setText("0h 00m");
-            progressDailyLimit.setProgress(0);
-            return;
-        }
-
-        cardPermissionWarning.setVisibility(View.GONE);
-        loadUsageData();
     }
 
     private boolean hasUsageStatsPermission() {
@@ -395,108 +559,158 @@ public class MainActivity extends AppCompatActivity {
         return mode == AppOpsManager.MODE_ALLOWED;
     }
 
-    private void loadUsageData() {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) getSystemService(Context.USAGE_STATS_SERVICE);
-        if (usageStatsManager == null) return;
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        long startTime = calendar.getTimeInMillis();
-        long endTime = System.currentTimeMillis();
-
-        List<UsageStats> stats = usageStatsManager.queryUsageStats(
-                UsageStatsManager.INTERVAL_DAILY,
-                startTime,
-                endTime
-        );
-
-        int baseLimit = roleManager.getDailyLimitMinutes();
-        int bonus = rewardManager.getBonusMinutes();
-        int totalLimit = baseLimit + bonus;
-
-        tvDailyLimitText.setText(getString(R.string.daily_limit_format, ScreenTimeHelper.formatDuration(totalLimit)));
-
-        if (stats == null || stats.isEmpty()) {
-            tvTotalScreenTime.setText("0h 00m");
+    private void refreshHardwareReports() {
+        if (!hasUsageStatsPermission()) {
+            cardPermissionWarning.setVisibility(View.VISIBLE);
+            tvTotalScreenTime.setText("00h 00m 00s");
             progressDailyLimit.setProgress(0);
-            tvRemainingTime.setText(getString(R.string.remaining_time_format, ScreenTimeHelper.formatDuration(totalLimit)));
-            tvEmptyAppsState.setVisibility(View.VISIBLE);
             return;
         }
 
-        Map<String, Long> usageMap = new HashMap<>();
-        long totalMillis = 0;
+        cardPermissionWarning.setVisibility(View.GONE);
 
-        for (UsageStats stat : stats) {
-            long foregroundTime = stat.getTotalTimeInForeground();
-            if (foregroundTime > 60_000L) {
-                usageMap.put(stat.getPackageName(), foregroundTime);
-                totalMillis += foregroundTime;
-            }
-        }
+        HardwareUsageReporter.AggregatedReport report = usageReporter.generateReport(currentDateRange);
+        tvReportDateTitle.setText(report.formattedDate);
+        tvTotalScreenTime.setText(report.totalHms);
+        tvLiveClockSeconds.setText("Live Sync");
 
-        int totalMinutes = (int) (totalMillis / (1000 * 60));
-        tvTotalScreenTime.setText(ScreenTimeHelper.formatDuration(totalMinutes));
+        int baseLimit = roleManager.getDailyLimitMinutes();
+        int bonus = rewardManager.getBonusMinutes();
+        int totalLimitMins = baseLimit + bonus;
+        int totalUsedMins = (int) (report.totalForegroundMs / (1000 * 60));
 
-        int progress = ScreenTimeHelper.calculateProgress(totalMinutes, totalLimit);
+        tvDailyLimitText.setText(getString(R.string.daily_limit_format, ScreenTimeHelper.formatDuration(totalLimitMins)));
+        int progress = ScreenTimeHelper.calculateProgress(totalUsedMins, totalLimitMins);
         progressDailyLimit.setProgress(progress);
 
-        int remainingMinutes = ScreenTimeHelper.calculateRemaining(totalMinutes, totalLimit);
-        tvRemainingTime.setText(getString(
-                R.string.remaining_time_format,
-                ScreenTimeHelper.formatDuration(remainingMinutes)
-        ));
+        int remainingMins = ScreenTimeHelper.calculateRemaining(totalUsedMins, totalLimitMins);
+        tvRemainingTime.setText(getString(R.string.remaining_time_format, ScreenTimeHelper.formatDuration(remainingMins)));
 
-        // Trigger lock overlay if Child and time is completely up
-        if (roleManager.isChild() && remainingMinutes <= 0) {
+        if (roleManager.isChild() && remainingMins <= 0 && totalLimitMins > 0) {
             Intent lockIntent = new Intent(this, LockOverlayActivity.class);
             lockIntent.putExtra(LockOverlayActivity.EXTRA_REASON, "LIMIT_EXCEEDED");
             startActivity(lockIntent);
         }
 
-        displayTopApps(usageMap);
+        renderMetricsList(report.topApps);
     }
 
-    private void displayTopApps(Map<String, Long> usageMap) {
-        layoutTopAppsList.removeAllViews();
+    private void renderMetricsList(List<HardwareUsageReporter.AppMetricItem> apps) {
+        layoutHardwareMetricsList.removeAllViews();
 
-        if (usageMap.isEmpty()) {
-            layoutTopAppsList.addView(tvEmptyAppsState);
-            tvEmptyAppsState.setVisibility(View.VISIBLE);
+        if (apps == null || apps.isEmpty()) {
+            layoutHardwareMetricsList.addView(tvEmptyMetricsState);
+            tvEmptyMetricsState.setVisibility(View.VISIBLE);
             return;
         }
 
-        PackageManager pm = getPackageManager();
-        List<Map.Entry<String, Long>> sortedList = new ArrayList<>(usageMap.entrySet());
-        Collections.sort(sortedList, (a, b) -> Long.compare(b.getValue(), a.getValue()));
+        for (HardwareUsageReporter.AppMetricItem item : apps) {
+            LinearLayout row = new LinearLayout(this);
+            row.setOrientation(LinearLayout.HORIZONTAL);
+            row.setPadding(0, 10, 0, 10);
 
-        int count = 0;
-        for (Map.Entry<String, Long> entry : sortedList) {
-            if (count++ >= 5) break;
+            TextView nameView = new TextView(this);
+            nameView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.2f));
+            nameView.setText(item.appName);
+            nameView.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
+            nameView.setTextSize(13f);
+            nameView.setTypeface(null, android.graphics.Typeface.BOLD);
 
-            String packageName = entry.getKey();
-            String appName;
-            try {
-                appName = pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0)).toString();
-            } catch (PackageManager.NameNotFoundException e) {
-                appName = packageName.contains(".")
-                        ? packageName.substring(packageName.lastIndexOf('.') + 1)
-                        : packageName;
+            TextView valueView = new TextView(this);
+            valueView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+            valueView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+            valueView.setTextSize(12f);
+
+            if (currentMetricView == MetricView.TIME) {
+                valueView.setText(item.formattedTimeHms);
+                valueView.setTextColor(ContextCompat.getColor(this, R.color.neon_cyan));
+            } else if (currentMetricView == MetricView.STORAGE) {
+                valueView.setText(String.format(java.util.Locale.US, "%.1f MB", item.storageMb));
+                valueView.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
+            } else if (currentMetricView == MetricView.RAM) {
+                valueView.setText(String.format(java.util.Locale.US, "%.0f MB RAM", item.ramMb));
+                valueView.setTextColor(ContextCompat.getColor(this, R.color.neon_emerald));
+            } else if (currentMetricView == MetricView.BATTERY) {
+                valueView.setText(String.format(java.util.Locale.US, "%.1f%% battery", item.batteryPercent));
+                valueView.setTextColor(ContextCompat.getColor(this, R.color.accent_warning));
             }
 
-            int mins = (int) (entry.getValue() / (1000 * 60));
-            String formattedTime = ScreenTimeHelper.formatDuration(mins);
+            row.addView(nameView);
+            row.addView(valueView);
+            layoutHardwareMetricsList.addView(row);
+        }
+    }
 
-            TextView row = new TextView(this);
-            row.setText(String.format("%s — %s", appName, formattedTime));
-            row.setTextSize(14f);
-            row.setTextColor(ContextCompat.getColor(this, R.color.text_primary));
-            row.setPadding(0, 8, 0, 8);
+    private void displayCuratedKidsApps() {
+        layoutAppGuideContainer.removeAllViews();
+        List<AppRecommendationManager.RecommendedApp> curated = appRecManager.getCuratedApps();
 
-            layoutTopAppsList.addView(row);
+        for (AppRecommendationManager.RecommendedApp app : curated) {
+            LinearLayout itemLayout = new LinearLayout(this);
+            itemLayout.setOrientation(LinearLayout.VERTICAL);
+            itemLayout.setPadding(0, 8, 0, 8);
+
+            TextView title = new TextView(this);
+            title.setText("⭐ " + app.name + " (" + app.ageSuitability + ")");
+            title.setTextColor(ContextCompat.getColor(this, R.color.neon_emerald));
+            title.setTextSize(13f);
+            title.setTypeface(null, android.graphics.Typeface.BOLD);
+
+            TextView desc = new TextView(this);
+            desc.setText(app.category + " — " + app.benefits);
+            desc.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
+            desc.setTextSize(11f);
+
+            itemLayout.addView(title);
+            itemLayout.addView(desc);
+            layoutAppGuideContainer.addView(itemLayout);
+        }
+    }
+
+    private void runInstalledAppsRiskScan() {
+        layoutAppGuideContainer.removeAllViews();
+        PackageManager pm = getPackageManager();
+        List<ApplicationInfo> installed = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+
+        List<AppRecommendationManager.AppRiskAssessment> flagged = new ArrayList<>();
+        for (ApplicationInfo info : installed) {
+            if ((info.flags & ApplicationInfo.FLAG_SYSTEM) != 0) continue; // skip system apps
+            String label = pm.getApplicationLabel(info).toString();
+            AppRecommendationManager.AppRiskAssessment assessment = appRecManager.assessAppRisk(info.packageName, label);
+            if (assessment.riskLevel != AppRecommendationManager.RiskLevel.SAFE) {
+                flagged.add(assessment);
+            }
+        }
+
+        if (flagged.isEmpty()) {
+            TextView clean = new TextView(this);
+            clean.setText("🛡️ Zero predatory loot-box or high-risk apps detected on this device!");
+            clean.setTextColor(ContextCompat.getColor(this, R.color.neon_emerald));
+            clean.setTextSize(12f);
+            clean.setPadding(0, 10, 0, 10);
+            layoutAppGuideContainer.addView(clean);
+            return;
+        }
+
+        for (AppRecommendationManager.AppRiskAssessment item : flagged) {
+            LinearLayout itemLayout = new LinearLayout(this);
+            itemLayout.setOrientation(LinearLayout.VERTICAL);
+            itemLayout.setPadding(0, 8, 0, 8);
+
+            TextView title = new TextView(this);
+            title.setText("⚠️ " + item.appName + " — " + item.riskLevel.label);
+            title.setTextColor(item.riskLevel.colorHex);
+            title.setTextSize(13f);
+            title.setTypeface(null, android.graphics.Typeface.BOLD);
+
+            TextView reason = new TextView(this);
+            reason.setText(item.reason);
+            reason.setTextColor(ContextCompat.getColor(this, R.color.text_secondary));
+            reason.setTextSize(11f);
+
+            itemLayout.addView(title);
+            itemLayout.addView(reason);
+            layoutAppGuideContainer.addView(itemLayout);
         }
     }
 }

@@ -188,11 +188,7 @@ public class AiIntegrateActivity extends AppCompatActivity {
                 Button btnDownload = new Button(this);
                 btnDownload.setText("Download GGUF");
                 btnDownload.setTextSize(12f);
-                btnDownload.setOnClickListener(v -> {
-                    modelCatalog.startDownload(item);
-                    Toast.makeText(this, "Enqueued download from Hugging Face for " + item.name, Toast.LENGTH_SHORT).show();
-                    refreshModelsList();
-                });
+                btnDownload.setOnClickListener(v -> showDownloadConfirmationDialog(item));
                 buttonRow.addView(btnDownload);
             } else if (status == ModelCatalog.DownloadStatus.DOWNLOADING) {
                 Button btnDownloading = new Button(this);
@@ -220,6 +216,14 @@ public class AiIntegrateActivity extends AppCompatActivity {
                 });
                 buttonRow.addView(btnDelete);
             } else if (status == ModelCatalog.DownloadStatus.LOADED) {
+                Button btnOpenChat = new Button(this);
+                btnOpenChat.setText("Open in AI Chat 🚀");
+                btnOpenChat.setTextSize(12f);
+                btnOpenChat.setOnClickListener(v -> {
+                    startActivity(new android.content.Intent(this, ChatActivity.class));
+                });
+                buttonRow.addView(btnOpenChat);
+
                 Button btnUnload = new Button(this);
                 btnUnload.setText("Unload");
                 btnUnload.setTextSize(12f);
@@ -248,6 +252,32 @@ public class AiIntegrateActivity extends AppCompatActivity {
 
             layoutModelsList.addView(card);
         }
+    }
+
+    private void showDownloadConfirmationDialog(ModelCatalog.ModelItem item) {
+        currentProfile = DeviceHardwareProfiler.scanDevice(this);
+        DeviceHardwareProfiler.CompatibilityReport report = DeviceHardwareProfiler.evaluateModelCompatibility(currentProfile, item);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(item.name + " — Hardware Check");
+        String msg = String.format(java.util.Locale.US,
+                "%s\n\n%s\n\nRecommendation:\n%s\n\nDevice Metrics:\n• RAM: %.1f GB (Requires: %.1f GB)\n• Free Disk: %.1f GB (Model: %d MB)\n• CPU Cores: %d\n• Detected Tier: %s",
+                report.statusTitle,
+                report.message,
+                report.recommendation,
+                currentProfile.getTotalRamGb(), item.minRamGb,
+                currentProfile.getFreeStorageGb(), item.sizeMb,
+                currentProfile.cpuCores,
+                currentProfile.tier.description
+        );
+        builder.setMessage(msg);
+        builder.setPositiveButton("Proceed & Download", (dialog, which) -> {
+            modelCatalog.startDownload(item);
+            Toast.makeText(this, "Enqueued download from Hugging Face for " + item.name, Toast.LENGTH_SHORT).show();
+            refreshModelsList();
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
     }
 
     private void showPollinationsDialog() {
